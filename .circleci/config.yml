@@ -1,0 +1,102 @@
+version: 2
+
+# Re-usable blocks to reduce boilerplate in job definitions.
+references:
+  default_machine_job: &default_machine_job
+    machine: true
+    working_directory: ~/workdir
+
+  set_version_env_variable: &set_version_env_variable
+    run:
+      name: Define Environment Variable VERSION_NUMBER and ENV at Runtime
+      command: |
+        echo export VERSION_NUMBER=$(cat ~/workdir/.version) >> $BASH_ENV
+        source $BASH_ENV
+        echo $VERSION_NUMBER
+
+  compile_crystal: &compile_crystal
+    run:
+      name: Get version
+      command: |
+        make clean buildStatic
+
+jobs:
+  checkout_and_version:
+    docker:
+      - image: codacy/git-version:latest
+    working_directory: ~/workdir
+    steps:
+      - checkout
+      - run:
+          name: Set version
+          command: /bin/git-version > .version
+      - run:
+          name: Current version
+          command: cat .version
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - workdir
+
+  compile:
+    <<: *default_machine_job
+    steps:
+      - run:
+          name: Compile
+          command: make clean buildStatic
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - workdir/*
+      - store_artifacts:
+          path: bin
+
+  publish-github-release:
+    docker:
+      - image: circleci/golang:1.8
+    steps:
+      - attach_workspace:
+          at: ./artifacts
+      - run:
+          name: "Publish Release on GitHub"
+          command: |
+            go get github.com/tcnksm/ghr
+            VERSION=$(cat .version)
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
+
+  tag-version:
+    <<: *default_machine_job
+    steps:
+      - attach_workspace:
+          at: ~/
+      - add_ssh_keys:
+          fingerprints:
+            - "df:83:d7:c7:d5:79:06:c2:3b:d1:fd:e2:a3:d1:12:c5"
+      - deploy:
+          name: Tag git repository
+          command: git tag $(cat .version) && git push --tags
+
+workflows:
+  version: 2
+  publish:
+    jobs:
+      - checkout_and_version
+      - compile:
+          requires:
+            - checkout_and_version
+      - publish-github-release:
+          requires:
+            - compile
+          filters:
+            branches:
+              only:
+              - master
+          context: CodacyAWS
+      - tag-version:
+          requires:
+            - publish-github-release
+          filters:
+            branches:
+              only:
+                - master
+          context: CodacyAWS
