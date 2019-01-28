@@ -16,9 +16,8 @@ references:
 
   compile_crystal: &compile_crystal
     run:
-      name: Get version
-      command: |
-        make clean buildStatic
+      name: Compile static executable
+      command: make clean buildStatic
 
 jobs:
   checkout_and_version:
