@@ -50,6 +50,7 @@ jobs:
   publish-github-release:
     docker:
       - image: circleci/golang:1.8
+    working_directory: ~/workdir
     steps:
       - attach_workspace:
           at: ~/
@@ -57,7 +58,7 @@ jobs:
           name: "Publish Release on GitHub"
           command: |
             go get github.com/tcnksm/ghr
-            VERSION=$(cat .version)
+            VERSION=$(cat ~/workdir/.version)
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./bin/
 
   tag-version:
