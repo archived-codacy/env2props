@@ -1,6 +1,12 @@
 
 # ENV2PROPS
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c811f6b557ee4e44ad373084015ba0b3)](https://www.codacy.com/app/Codacy/env2props?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=codacy/env2props&amp;utm_campaign=Badge_Grade)
+[![CircleCI](https://circleci.com/gh/codacy/env2props.svg?style=svg)](https://circleci.com/gh/codacy/env2props)
+[![](https://img.shields.io/github/release/codacy/env2props.svg)](https://github.com/codacy/env2props/releases)
+
+
+
 This is a tool to transform your environment variables into the java Properties format intended to be passed from the command line.
 
 e.g.:
