@@ -14,11 +14,6 @@ references:
         source $BASH_ENV
         echo $VERSION_NUMBER
 
-  compile_crystal: &compile_crystal
-    run:
-      name: Compile static executable
-      command: make clean buildStatic
-
 jobs:
   checkout_and_version:
     docker:
@@ -42,7 +37,7 @@ jobs:
     steps:
       - run:
           name: Compile
-          command: make clean buildStatic
+          command: make buildStatic
       - persist_to_workspace:
           root: ~/
           paths:
