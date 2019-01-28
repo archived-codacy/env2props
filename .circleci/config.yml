@@ -36,7 +36,7 @@ jobs:
     <<: *default_machine_job
     steps:
       - attach_workspace:
-        at: ~/
+          at: ~/
       - run:
           name: Compile
           command: make clean buildStatic
