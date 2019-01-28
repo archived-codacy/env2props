@@ -17,6 +17,7 @@ clean: ## clean target directories
 	rm -rf bin
 
 buildStatic: ## compiles from crystal sources into static binary
+	mkdir -p bin
 	docker run --rm -it -v $(PWD):/app -w /app durosoft/crystal-alpine:latest crystal build src/env2props.cr -o bin/env2props --release --static --no-debug
 
 .PHONY: help
