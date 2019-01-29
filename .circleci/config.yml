@@ -61,18 +61,6 @@ jobs:
             VERSION=$(cat ~/workdir/.version)
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ~/workdir/bin/
 
-  tag-version:
-    <<: *default_machine_job
-    steps:
-      - attach_workspace:
-          at: ~/
-      - add_ssh_keys:
-          fingerprints:
-            - "df:83:d7:c7:d5:79:06:c2:3b:d1:fd:e2:a3:d1:12:c5"
-      - deploy:
-          name: Tag git repository
-          command: git tag $(cat .version) && git push --tags
-
 workflows:
   version: 2
   publish:
@@ -88,12 +76,4 @@ workflows:
             branches:
               only:
               - master
-          context: CodacyAWS
-      - tag-version:
-          requires:
-            - publish-github-release
-          filters:
-            branches:
-              only:
-                - master
           context: CodacyAWS
