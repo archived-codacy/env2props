@@ -18,7 +18,7 @@ LC_MONETARY=en_US.UTF-8
 LANG=en_US.UTF-8
 
 $ env2props
--Dlc.paper="en_US.UTF-8" -Dlc.monetary="en_US.UTF-8" -Dlang="en_US.UTF-8"
+-DLC.PAPER="en_US.UTF-8" -DLC.MONETARY="en_US.UTF-8" -DLANG="en_US.UTF-8"
 ```
 
 Under the option `-p` or `--prefix` you can pass a matching prefix for the environment variables.
@@ -32,7 +32,7 @@ LC_MONETARY=en_US.UTF-8
 LANG=en_US.UTF-8
 
 $ env2props -p LC_
--Dpaper="en_US.UTF-8" -Dmonetary="en_US.UTF-8"
+-DPAPER="en_US.UTF-8" -DMONETARY="en_US.UTF-8"
 ```
 
 The output is provided on standard output and without any additional new-line, as it is intended to be used in-line within java command execution.
@@ -42,12 +42,11 @@ The output is provided on standard output and without any additional new-line, a
 Each environment variable is transformed as follows:
 
  - remove the trailing prefix (if specified)
- - down case the entire string
  - trasform all the `_` characters into `.`
 
 ## Usage
 
-After making the binary executable and available on the `PATh`(should work out-of-the-box on any linux machine).
+After making the binary executable and available on the `PATH`(should work out-of-the-box on any linux machine).
 You can use this tool in-line while launching java applications e.g.:
 
 ```
