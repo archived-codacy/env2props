@@ -23,7 +23,6 @@ props = String.build do |props|
 
     key = k
       .lchop(prefix)
-      .downcase       # all downcase
       .gsub("_", ".") # all underscores to dots
 
     # given https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html#load-java.io.InputStream-
