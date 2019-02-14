@@ -63,6 +63,9 @@ jobs:
           at: ~/
       - *install_crystal
       - run:
+          name: Crystal version
+          command: crystal --version
+      - run:
           name: Test
           command: make test
 
