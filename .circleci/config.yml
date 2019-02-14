@@ -14,6 +14,15 @@ references:
         source $BASH_ENV
         echo $VERSION_NUMBER
 
+  install_crystal: &install_crystal
+    run:
+      name: Install Crystal
+      command: |
+        curl -sSL https://dist.crystal-lang.org/apt/setup.sh | sudo bash
+        sudo apt-get update
+        sudo apt-get install crystal libevent-core-2.0-5 libevent-dev libevent-extra-2.0-5 libevent-openssl-2.0-5 libevent-pthreads-2.0-5 libgmp-dev libgmpxx4ldbl libssl-dev libxml2-dev libyaml-dev libreadline-dev automake libtool git llvm libpcre3-dev build-essential -y
+        sudo make clean test build
+
 jobs:
   checkout_and_version:
     docker:
@@ -52,6 +61,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+      - *install_crystal
       - run:
           name: Test
           command: make test
