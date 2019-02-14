@@ -44,9 +44,9 @@ end
 
 it "should get unquoted strings when using Typesafe config" do
   args = DEFAULT_ARGS.clone
-  args << %(export CONFIG_mykey="1 2 3" && java "$(bin/env2props -p CONFIG_)" -cp config-1.3.2.jar:. spec.CheckTypesafeConfig)
+  args << %(export CONFIG_mykey="1 2 3" && sh -c "java $(bin/env2props -p CONFIG_) -cp config-1.3.2.jar:. spec.CheckTypesafeConfig")
   exit_value, output = run_cmd(CMD, args)
 
-  output.includes?("1 2 3").should eq(true)
+  output.should eq("1 2 3")
   exit_value.should eq(0)
 end

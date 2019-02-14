@@ -7,6 +7,6 @@ public class CheckTypesafeConfig {
   public static void main(String [] args) {
     Config conf = ConfigFactory.load();
     String myvalue = conf.getString("mykey");
-    System.out.println(myvalue);
+    System.out.print(myvalue);
   }
 }
