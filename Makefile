@@ -12,6 +12,11 @@ build: fmt ## compiles from crystal sources
 	mkdir -p bin
 	$(CRYSTAL) build $(CRYSTAL_FLAGS) src/env2props.cr -o bin/env2props
 
+.PHONY: test
+test: build ## runs crystal tests
+	javac spec/CheckProperties.java
+	$(CRYSTAL) spec spec/*.cr
+
 .PHONY: clean
 clean: ## clean target directories
 	rm -rf bin
