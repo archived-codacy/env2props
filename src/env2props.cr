@@ -29,7 +29,13 @@ props = String.build do |props|
     encoding = "ISO8859-1"
     str = String.new(bytes: v.encode(encoding), encoding: encoding)
 
-    str = str.dump
+    # given: https://docs.oracle.com/javase/7/docs/technotes/tools/windows/java.html
+    # If value is a string that contains spaces, then you must enclose the string in double quotation marks:
+    if str.includes?(' ')
+      str = str.dump
+    else
+      str = str.dump_unquoted
+    end
 
     if (key.size > 1) || (key.size == 1 && key[0].alphanumeric?)
       if first
