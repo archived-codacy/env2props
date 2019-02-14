@@ -14,7 +14,9 @@ build: fmt ## compiles from crystal sources
 
 .PHONY: test
 test: build ## runs crystal tests
+	wget -nc http://central.maven.org/maven2/com/typesafe/config/1.3.2/config-1.3.2.jar
 	javac spec/CheckProperties.java
+	javac -cp config-1.3.2.jar spec/CheckTypesafeConfig.java
 	$(CRYSTAL) spec spec/*.cr
 
 .PHONY: clean
