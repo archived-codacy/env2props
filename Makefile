@@ -1,6 +1,5 @@
 CRYSTAL=/usr/bin/crystal
-CRYSTAL_FLAGS=
-# --release
+CRYSTAL_FLAGS=--release
 
 all: fmt build
 
