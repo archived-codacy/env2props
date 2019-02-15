@@ -32,6 +32,15 @@ it "should properly propagate escaped multi string java properties" do
   exit_value.should eq(0)
 end
 
+it "should properly translate double underscores in single dash" do
+  args = DEFAULT_ARGS.clone
+  args << %(export CONFIG_my__key3=myvalue && sh -c "java $(bin/env2props -p CONFIG_) spec.CheckProperties")
+  exit_value, output = run_cmd(CMD, args)
+
+  output.includes?("my-key3:myvalue").should eq(true)
+  exit_value.should eq(0)
+end
+
 it "should properly inject multiple java properties" do
   args = DEFAULT_ARGS.clone
   args << %(export CONFIG_mykey11=1 && export CONFIG_mykey22=2 && java $(bin/env2props -p CONFIG_) spec.CheckProperties)

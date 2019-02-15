@@ -23,7 +23,8 @@ props = String.build do |props|
 
     key = k
       .lchop(prefix)
-      .gsub("_", ".") # all underscores to dots
+      .gsub("__", "-") # double underscore to dash
+      .gsub("_", ".")  # all underscores to dots
 
     # given https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html#load-java.io.InputStream-
     encoding = "ISO8859-1"
