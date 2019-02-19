@@ -99,7 +99,7 @@ jobs:
 
   changelog_html:
     docker:
-      - image: conoria/alpine-pandoc:latest
+      - image: skyzyx/alpine-pandoc:1.0.0
     working_directory: ~/workdir
     steps:
       - attach_workspace:
