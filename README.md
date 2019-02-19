@@ -37,6 +37,8 @@ $ env2props -p LC_
 
 The output is provided on standard output and without any additional new-line, as it is intended to be used in-line within java command execution.
 
+## [Changelog](https://circleci.com/api/v1.1/project/github/codacy/env2props/latest/artifacts/0/changelog.html)
+
 ## Conventions
 
 Each environment variable is transformed as follows:

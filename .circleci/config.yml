@@ -82,6 +82,38 @@ jobs:
             VERSION=$(cat ~/workdir/.version)
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ~/workdir/bin/
 
+  changelog:
+    docker:
+      - image: biig/auto-changelog:1.11.0
+    working_directory: ~/workdir
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Generate Changelog
+          command: auto-changelog
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - workdir/*
+
+  changelog_html:
+    docker:
+      - image: jpbernius/pandoc:latest
+    working_directory: ~/workdir
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Generate Changelog Html
+          command: pandoc -f markdown -t html5 -o changelog.html CHANGELOG.md -c changelog/pandoc.css --self-contained
+      - store_artifacts:
+          path: CHANGELOG.md
+          destination: CHANGELOG.md
+      - store_artifacts:
+          path: changelog.html
+          destination: changelog.html
+
 workflows:
   version: 2
   publish:
@@ -93,6 +125,12 @@ workflows:
       - test:
           requires:
             - compile
+      - changelog:
+          requires:
+            - test
+      - changelog_html:
+          requires:
+            - changelog
       - publish-github-release:
           requires:
             - test
