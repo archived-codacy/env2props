@@ -41,9 +41,9 @@ The output is provided on standard output and without any additional new-line, a
 
 Each environment variable is transformed as follows:
 
- - remove the trailing prefix (if specified)
- - trasform all the "__" into `-`
- - trasform all the `_` characters into `.`
+- remove the trailing prefix (if specified)
+- trasform all the "__" into `-`
+- trasform all the `_` characters into `.`
 
 ## Usage
 
