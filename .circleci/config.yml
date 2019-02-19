@@ -92,9 +92,27 @@ jobs:
       - run:
           name: Generate Changelog
           command: auto-changelog -o CHANGELOG.md --commit-limit false --release-summary
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - workdir/*
+
+  changelog_html:
+    docker:
+      - image: conoria/alpine-pandoc:latest
+    working_directory: ~/workdir
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Generate Changelog Html
+          command: pandoc -f markdown -t html5 -o changelog.html CHANGELOG.md
       - store_artifacts:
           path: CHANGELOG.md
           destination: CHANGELOG.md
+      - store_artifacts:
+          path: changelog.html
+          destination: changelog.html
 
 workflows:
   version: 2
@@ -110,6 +128,9 @@ workflows:
       - changelog:
           requires:
             - test
+      - changelog_html:
+          requires:
+            - changelog
       - publish-github-release:
           requires:
             - test
