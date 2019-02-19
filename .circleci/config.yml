@@ -82,6 +82,20 @@ jobs:
             VERSION=$(cat ~/workdir/.version)
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ~/workdir/bin/
 
+  changelog:
+    docker:
+      - image: biig/auto-changelog:1.11.0
+    working_directory: ~/workdir
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Generate Changelog
+          command: auto-changelog -o CHANGELOG.md --commit-limit false --release-summary
+      - store_artifacts:
+          path: CHANGELOG.md
+          destination: CHANGELOG.md
+
 workflows:
   version: 2
   publish:
@@ -93,6 +107,9 @@ workflows:
       - test:
           requires:
             - compile
+      - changelog:
+          requires:
+            - test
       - publish-github-release:
           requires:
             - test
