@@ -91,7 +91,7 @@ jobs:
           at: ~/
       - run:
           name: Generate Changelog
-          command: auto-changelog -o CHANGELOG.md --commit-limit false --release-summary
+          command: auto-changelog
       - persist_to_workspace:
           root: ~/
           paths:
@@ -106,7 +106,7 @@ jobs:
           at: ~/
       - run:
           name: Generate Changelog Html
-          command: pandoc -f markdown -t html5 -o changelog.html CHANGELOG.md
+          command: pandoc -f markdown -t html5 -o changelog.html CHANGELOG.md -c changelog/pandoc.css --self-contained
       - store_artifacts:
           path: CHANGELOG.md
           destination: CHANGELOG.md
