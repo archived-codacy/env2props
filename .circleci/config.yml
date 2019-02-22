@@ -128,9 +128,17 @@ workflows:
       - changelog:
           requires:
             - test
+          filters:
+            branches:
+              only:
+              - master
       - changelog_html:
           requires:
             - changelog
+          filters:
+            branches:
+              only:
+              - master
       - publish-github-release:
           requires:
             - test
