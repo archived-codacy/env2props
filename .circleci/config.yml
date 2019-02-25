@@ -125,20 +125,6 @@ workflows:
       - test:
           requires:
             - compile
-      - changelog:
-          requires:
-            - test
-          filters:
-            branches:
-              only:
-              - master
-      - changelog_html:
-          requires:
-            - changelog
-          filters:
-            branches:
-              only:
-              - master
       - publish-github-release:
           requires:
             - test
@@ -147,3 +133,9 @@ workflows:
               only:
               - master
           context: CodacyAWS
+      - changelog:
+          requires:
+            - publish-github-release
+      - changelog_html:
+          requires:
+            - changelog
