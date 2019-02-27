@@ -129,6 +129,12 @@ jobs:
             echo -n $(cat .version) >> version.json
             echo -n '"}' >> version.json
       - store_artifacts:
+          path: CHANGELOG.md
+          destination: CHANGELOG.md
+      - store_artifacts:
+          path: changelog.html
+          destination: changelog.html
+      - store_artifacts:
           path: version.json
           destination: version.json
 
