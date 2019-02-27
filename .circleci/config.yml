@@ -109,6 +109,10 @@ jobs:
       - run:
           name: Generate Changelog Html
           command: pandoc -f markdown -t html5 -o changelog.html CHANGELOG.md -c changelog/pandoc.css --self-contained
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - workdir/*
 
   version_badge:
     <<: *default_machine_job
