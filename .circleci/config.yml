@@ -114,6 +114,22 @@ jobs:
           path: changelog.html
           destination: changelog.html
 
+  version_badge:
+    <<: *default_machine_job
+    working_directory: ~/workdir
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Create version badge endpoint
+          command: |
+            echo -n '{"schemaVersion": 1, "label": "version", "color": "blue", "message":"' > version.json
+            echo -n $(cat .version) >> version.json
+            echo -n '"}' >> version.json
+      - store_artifacts:
+          path: version.json
+          destination: version.json
+
 workflows:
   version: 2
   publish:
@@ -139,3 +155,6 @@ workflows:
       - changelog_html:
           requires:
             - changelog
+      - version_badge:
+          requires:
+            - changelog_html
