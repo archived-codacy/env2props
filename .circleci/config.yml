@@ -155,10 +155,9 @@ workflows:
               only:
               - master
           context: CodacyAWS
-
-  documentation:
-    jobs:
       - changelog
+          requires:
+            - test
       - changelog_html:
           requires:
             - changelog
