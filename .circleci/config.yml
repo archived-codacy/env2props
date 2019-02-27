@@ -87,8 +87,10 @@ jobs:
       - image: biig/auto-changelog:1.11.0
     working_directory: ~/workdir
     steps:
-      - attach_workspace:
-          at: ~/
+      - checkout
+      - run:
+          name: Checkout master branch
+          command: git checkout master
       - run:
           name: Generate Changelog
           command: auto-changelog
@@ -149,9 +151,7 @@ workflows:
               only:
               - master
           context: CodacyAWS
-      - changelog:
-          requires:
-            - publish-github-release
+      - changelog
       - changelog_html:
           requires:
             - changelog
