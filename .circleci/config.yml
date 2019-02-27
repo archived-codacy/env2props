@@ -161,6 +161,6 @@ workflows:
       - changelog_html:
           requires:
             - changelog
-      - version_badge:
+      - version_badge: # this has to be always the last scheduled job ...
           requires:
             - changelog_html
