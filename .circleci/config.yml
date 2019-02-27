@@ -109,12 +109,6 @@ jobs:
       - run:
           name: Generate Changelog Html
           command: pandoc -f markdown -t html5 -o changelog.html CHANGELOG.md -c changelog/pandoc.css --self-contained
-      - store_artifacts:
-          path: CHANGELOG.md
-          destination: CHANGELOG.md
-      - store_artifacts:
-          path: changelog.html
-          destination: changelog.html
 
   version_badge:
     <<: *default_machine_job
