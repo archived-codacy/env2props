@@ -87,8 +87,10 @@ jobs:
       - image: biig/auto-changelog:1.11.0
     working_directory: ~/workdir
     steps:
-      - attach_workspace:
-          at: ~/
+      - checkout
+      - run:
+          name: Checkout master branch
+          command: git checkout master
       - run:
           name: Generate Changelog
           command: auto-changelog
@@ -107,12 +109,32 @@ jobs:
       - run:
           name: Generate Changelog Html
           command: pandoc -f markdown -t html5 -o changelog.html CHANGELOG.md -c changelog/pandoc.css --self-contained
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - workdir/*
+
+  version_badge:
+    <<: *default_machine_job
+    working_directory: ~/workdir
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Create version badge endpoint
+          command: |
+            echo -n '{"schemaVersion": 1, "label": "version", "color": "blue", "message":"' > version.json
+            echo -n $(cat .version) >> version.json
+            echo -n '"}' >> version.json
       - store_artifacts:
           path: CHANGELOG.md
           destination: CHANGELOG.md
       - store_artifacts:
           path: changelog.html
           destination: changelog.html
+      - store_artifacts:
+          path: version.json
+          destination: version.json
 
 workflows:
   version: 2
@@ -135,7 +157,10 @@ workflows:
           context: CodacyAWS
       - changelog:
           requires:
-            - publish-github-release
+            - test
       - changelog_html:
           requires:
             - changelog
+      - version_badge: # this has to be always the last scheduled job ...
+          requires:
+            - changelog_html
